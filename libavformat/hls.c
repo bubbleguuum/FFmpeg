@@ -2594,16 +2594,16 @@ static int hls_probe(const AVProbeData *p)
         strstr(p->buf, "#EXT-X-TARGETDURATION:") ||
         strstr(p->buf, "#EXT-X-MEDIA-SEQUENCE:")) {
 
-        int mime_ok = p->mime_type && !(
-            av_strcasecmp(p->mime_type, "application/vnd.apple.mpegurl") &&
-            av_strcasecmp(p->mime_type, "audio/mpegurl")
+        int mime_ok = p->mime_type && (
+            av_stristart(p->mime_type, "application/vnd.apple.mpegurl", NULL) ||
+            av_stristart(p->mime_type, "audio/mpegurl", NULL)
             );
 
-        int mime_x = p->mime_type && !(
-            av_strcasecmp(p->mime_type, "audio/x-mpegurl") &&
-            av_strcasecmp(p->mime_type, "application/x-mpegurl")
+        int mime_x = p->mime_type && (
+            av_stristart(p->mime_type, "audio/x-mpegurl", NULL) ||
+            av_stristart(p->mime_type, "application/x-mpegurl", NULL)
             );
-
+        
         if (!mime_ok &&
             !mime_x &&
             !av_match_ext    (p->filename, "m3u8,m3u") &&
